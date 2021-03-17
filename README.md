@@ -1,9 +1,5 @@
-<style>
-h1 {text-align: center;}
-</style>
-
-<h1 text-align: center; >Equitable Street Sweeping in Los Angeles</h1>
-<h2 text-align: center;> CSCI 401 Capstone Project</h2>
+<h1 style="text-align: center;" >Equitable Street Sweeping in Los Angeles</h1>
+<h2 style="text-align: center;"> CSCI 401 Capstone Project</h2>
 
 <h3>Project deliverables:</h3>
 <ul>
