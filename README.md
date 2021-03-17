@@ -1,4 +1,5 @@
-<h1>Equitable Street Sweeping in Los Angeles - CSCI 401 Capstone Project</h1>
+<h1 text-align: center; >Equitable Street Sweeping in Los Angeles</h1>
+<h2 text-align: center;> CSCI 401 Capstone Project</h2>
 
 <h2>Project deliverables:</h2>
 <ul>
