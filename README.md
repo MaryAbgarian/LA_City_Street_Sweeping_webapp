@@ -1,13 +1,13 @@
-Equitable Street Sweeping in Los Angeles - CSCI 401 Capstone Project
+<h1>Equitable Street Sweeping in Los Angeles - CSCI 401 Capstone Project</h1>
 
-Project deliverables:
+<h2>Project deliverables:</h2>
 <ul>
 <li>Recommendations on street sweeping route optimization</li>
 <li>Interactive map of the proposed new routes</li>
 <li>Street sweeping assessment report</li>
 </ul>
-Project Description:
-
+  
+<h2>Project Description:</h2>
 StreetsLA is responsible for sweeping over 6,500 centerline miles of street
 and over 600 miles of bike lanes citywide. The street sweeping operations
 can be divided into three major types of routes.
