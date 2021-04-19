@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -14,13 +14,28 @@
   <script src="papaparse.js"></script>
   <style>
     .container-fluid {
-      max-width: 30%;
+      width:600px; 
+    overflow-x:scroll; 
+    position:relative;
+    height: 280px;
     }
-    .fill{
+    table{
       background-color:rgba(0,0,0,0.6)!important; 
       padding: 15px;
+      text-align: center;
+      overflow-x: scroll;
     }
-    .press, h1{
+    tbody {
+   overflow-x: scroll;
+}
+
+th, td{
+  min-width: 200px;
+}
+    tr, td{
+      color: white;
+    }
+    .press, h1, h4{
       font-family: sans-serif;
       text-align: center;
     }
@@ -47,12 +62,13 @@
   </style>
 
   <title>Los Angeles City Street Sweeping Project</title>
- <?php echo var_dump($_POST); ?> 
-
+<!--   <?php echo var_dump($_POST); ?> 
+ -->
 </head>
 <body>
   <br><br>
   <h1>Los Angeles City Street Sweeping Project</h1>
+  <h4>(Routes and segments in order to be followed)</h4>
   <br><br><br><br>
   <div class="container-fluid fill">
  <div id="parsed_csv_list">
@@ -67,22 +83,37 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
 
   <script>
+    
+const geoJSONLayer = new GeoJSONLayer({
+   url: "https://opendata.arcgis.com/datasets/a3f84024497b4aea8bc2c2ad6db77d70_3.geojson",
+   copyright: "City of Los Angeles",
+});
+map.add(geoJSONLayer);  // adds the layer to the map
 
-let routes = <?$_POST["routes"]?>;
+let routes = <?php echo $_POST["routes"]; ?>;
 console.log(routes);
-
+let size=Object.keys(routes).length;
     function displayHTMLTable(routes){
       var table = "<table class='table'>";
-      for(i=0;i<routes.size;i++){
+
+table+="<thead>";
         table+= "<tr>";
-        console.log(routes.values().next().value);
-        for(j=0;j<routes.values().next().value.length;j++){
-          table+= "<td>";
-          table+= routes.values().next().value[j];
+        table+="<th>";
+        table+="route "+i+": ";
           table+= "</th>";
+          table+="</tr>";
+          table+="</thead>";
+          table+="<tbody> <tr>";
+        for(j=0;j<Object.keys(routes[i]).length; j++){
+                  console.log(routes[i][j]);
+
+          table+= "<td>";
+          table+= routes[i][j];
+          table+="</td>";
         }
         table+= "</tr>";
       }
+      table+="</tbody>";
       table+= "</table>";
       $("#parsed_csv_list").html(table);
     }
