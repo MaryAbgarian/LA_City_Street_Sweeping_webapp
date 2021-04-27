@@ -1,130 +1,268 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="papaparse.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>RouteTask | Sample | ArcGIS API for JavaScript 4.18</title>
   <style>
-    .container-fluid {
-      width:600px; 
-    overflow-x:scroll; 
-    position:relative;
-    height: 280px;
-    }
-    table{
-      background-color:rgba(0,0,0,0.6)!important; 
-      padding: 15px;
-      text-align: center;
-      overflow-x: scroll;
-    }
-    tbody {
-   overflow-x: scroll;
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+/*      margin-bottom: 10px;
+*/      height: 100%;
+width: 100%;
+
 }
 
-th, td{
-  min-width: 200px;
+#paneDiv {
+  position: absolute;
+  height: 100%;
+  top: 15px;
+  left: 56px;
+  padding: 0 12px 0 12px;
+  background-color: rgba(0, 0, 0, 0.65);
+  color: white;
+  border-radius: 8px;
+
 }
-    tr, td{
-      color: white;
+.press{
+  font-family: sans-serif;
+  text-align: center;
+  position: fixed;
+}
+
+</style>
+
+<link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
+<script src="https://js.arcgis.com/4.18/"></script>
+
+<script>
+
+
+  require([
+    "esri/Map",
+    "esri/views/MapView",
+    "esri/Graphic",
+    "esri/layers/GraphicsLayer",
+    "esri/tasks/RouteTask",
+    "esri/tasks/support/RouteParameters",
+    "esri/tasks/support/FeatureSet", 
+    "esri/layers/GeoJSONLayer",
+    "esri/renderers/UniqueValueRenderer",
+    "esri/layers/CSVLayer",
+    "esri/Color",
+    "esri/symbols/SimpleLineSymbol",
+    "esri/layers/KMLLayer",
+    "dojo/parser", 
+    "dojo/dom-style",
+    "dijit/layout/BorderContainer", 
+    "dijit/layout/ContentPane", 
+    "dojo/domReady!",
+    "esri/PopupTemplate"
+    ], function(Map, MapView, Graphic, GraphicsLayer, RouteTask, RouteParameters, FeatureSet, GeoJSONLayer, UniqueValueRenderer, CSVLayer, Color, SimpleLineSymbol, KMLLayer, parser, domStyle, PopupTemplate) {
+
+
+      const renderer = {
+  type: "simple",  // autocasts as new SimpleRenderer()
+  symbol: {
+    type: "simple-line",  // autocasts as new SimpleMarkerSymbol()
+    size: 6,
+    color: "red",
+    outline: {  // autocasts as new SimpleLineSymbol()
+      width: 0.5,
+      color: "blue"
     }
-    .press, h1, h4{
-      font-family: sans-serif;
-      text-align: center;
-    }
-    body{
-      width: 100%;
-      color: black;
-      background: url('LA.jpg') no-repeat center center fixed; 
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
-      z-index: -1;
-      font-family: sans-serif;
-    }
+  }
+};
 
-
-    label{
-
-      font-size:20px;
-      color: white;
-    }
-
-
-  </style>
-
-  <title>Los Angeles City Street Sweeping Project</title>
-<!--   <?php echo var_dump($_POST); ?> 
- -->
-</head>
-<body>
-  <br><br>
-  <h1>Los Angeles City Street Sweeping Project</h1>
-  <h4>(Routes and segments in order to be followed)</h4>
-  <br><br><br><br>
-  <div class="container-fluid fill">
- <div id="parsed_csv_list">
-
-  </div>
-  </div>
-  <br>
-
-
- 
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
-
-  <script>
-    
-const geoJSONLayer = new GeoJSONLayer({
-   url: "https://opendata.arcgis.com/datasets/a3f84024497b4aea8bc2c2ad6db77d70_3.geojson",
-   copyright: "City of Los Angeles",
+let popupTemplate = new PopupTemplate({
+  // autocasts as new PopupTemplate()
+  title: "Route is in zip code: {ZIP_L}",
+  outFields: ["*"]
 });
-map.add(geoJSONLayer);  // adds the layer to the map
 
-let routes = <?php echo $_POST["routes"]; ?>;
-console.log(routes);
-let size=Object.keys(routes).length;
-    function displayHTMLTable(routes){
-      var table = "<table class='table'>";
+const geoJSONLayer = new GeoJSONLayer({
+ url: "https://localhost/test.geojson",
+ copyright: "City of Los Angeles",
+ renderer: renderer
+});
 
-table+="<thead>";
-        table+= "<tr>";
-        table+="<th>";
-        table+="route "+i+": ";
-          table+= "</th>";
-          table+="</tr>";
-          table+="</thead>";
-          table+="<tbody> <tr>";
-        for(j=0;j<Object.keys(routes[i]).length; j++){
-                  console.log(routes[i][j]);
+geoJSONLayer.popupTemplate = popupTemplate;
 
-          table+= "<td>";
-          table+= routes[i][j];
-          table+="</td>";
-        }
-        table+= "</tr>";
-      }
-      table+="</tbody>";
-      table+= "</table>";
-      $("#parsed_csv_list").html(table);
+geoJSONLayer.popupTemplate.content = "<p>ASSETID is <b>{ASSETID}</b>" +
+"<ul><li>Street name is {STNAME}</li>" +
+"<li>Old street is {OLD_STREET}</li><ul>";
+
+
+
+
+
+var map = new Map({
+  basemap: "streets-navigation-vector",
+          layers: [geoJSONLayer] // Add the route layer to the map
+        });
+
+
+var view = new MapView({
+          container: "viewDiv", // Reference to the scene div created in step 5
+          map: map, // Reference to the map object created before the scene
+          center: [-118.3433877, 34.0340639],
+          zoom: 13
+        });
+
+});
+
+
+  
+  function enable() {
+    document.getElementById("f").checked= true;
+
+  }
+
+  function disable() {
+   document.getElementById("f").checked= false;
+ }
+
+ function refreshInput(input, val)
+ {
+  let txt="";
+
+  if(val==0)
+    txt="L";
+  else if (val==1)
+    txt="M";
+  else 
+    txt="H";
+
+  if(input=="Debris")//debris
+  {
+    document.getElementById("Debris").innerHTML="Debris Factor: "+txt;
+
+
+  }
+  if(input=="Socio")//socioeconomic
+  {
+
+    document.getElementById("Socio").innerHTML="Socioeconomic Factor: "+txt;
+
+  }
+
+  if(input=="Foliage"){
+    if(val=="on")
+    {      
+      enable();
     }
+    else 
+    {
+      disable();
+    }
+  }
+
+}
 
 
-displayHTMLTable(routes);
-
+function updateTextInput(val) {
+  if(document.getElementById("d").value==val)
+   {   if(val==0)
+    txt="L";
+    else if (val==1)
+      txt="M";
+    else 
+      txt="H";
+    document.getElementById("Debris").innerHTML="Debris Factor: "+txt;
+  }
+  if(document.getElementById("s").value==val)
+    {      if(val==0)
+      txt="L";
+      else if (val==1)
+        txt="M";
+      else 
+        txt="H";
+      document.getElementById("Socio").innerHTML="Socioeconomic Factor: "+txt;
+    }
+    if(document.getElementById("f").value=="on")
+    {      
+      enable();
+    }
+    else 
+    {
+      disable();
+    }
+    
+  }
 
 
 
 </script>
+</head>
+<body>
 
+
+  <?php 
+  // var_dump($_POST);
+  if(isset($_POST['d']) &&
+   isset($_POST['s']) &&
+   isset($_POST['f']))
+  {
+    $val1 = $_POST['d'];
+    $val2 = $_POST['s'];
+    $val3 = $_POST['f'];
+      // $exec_cmd = "../'Route Generation'/RouteCalculation {$num1} {$num2} {$num3}";
+      // $json_result = shell_exec($exec_cmd);
+  } else {
+    $val1 = 0;
+    $val2 = 0;
+    $val3 = 0;
+  }
+  ?>
+
+  <div id="viewDiv"></div>
+  <div id="paneDiv" class="esri-widget">
+    <br><br><br><br>
+    <h3>Adjust the scales <br> to modify routes:</h3>
+    <br><br>
+
+    <form action="directions.php" id="form" method="POST">
+      <!-- action="directions.php" -->
+      <label for="customRange3" id="Debris" class="form-label">Debris Factor</label>
+      <br>
+
+      <input type="range" class="form-range" id="d" name="d" min="0" max="2" step="1" value="<?php echo $val1; ?>" onchange="updateTextInput(this.value);">
+      <br>
+      <label for="customRange3" id="Socio" class="form-label">Socioeconomic Factor</label>
+      <br>
+      <input type="range" class="form-range" id="s" name="s" min="0" max="2" step="1" value="<?php echo $val2; ?>" onchange="updateTextInput(this.value);">
+      <br>
+      <div class="form-check">
+        <label class="form-check-label" id="Foliage"  for="flexCheckDefault">
+          Tree Foliage Factor
+        </label>
+        <input class="form-check-input" id="f" name="f" type="checkbox" onchange="updateTextInput(this.value);" >
+      </div>
+      <br>
+      <div class="container-fluid press">
+        <button type="submit" class="btn btn-dark">Generate</button>
+      </div>
+
+<!--       <input type="file" id="files"  class="form-control" accept=".csv" required> 
+-->    </div>
+
+</form>
+<div>
+</div>
+</div>
 </body>
+<script>
+
+  let debris=<?php echo $val1; ?>;
+  let socio=<?php echo $val2; ?>;
+  let foliage="<?php echo $val3; ?>";
+refreshInput("Debris", debris);
+refreshInput("Socio", socio);
+refreshInput("Foliage", foliage);
+//alert(foliage);
+</script>
 </html>
+
+
