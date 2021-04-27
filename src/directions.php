@@ -9,15 +9,15 @@
     body,
     #viewDiv {
       padding: 0;
-/*      margin-bottom: 10px;
-*/      height: 100%;
+
+height: 100%;
 width: 100%;
 
 }
 
 #paneDiv {
   position: absolute;
-  height: 100%;
+  height: 40%;
   top: 15px;
   left: 56px;
   padding: 0 12px 0 12px;
@@ -200,7 +200,7 @@ function updateTextInput(val) {
 
 
   <?php 
-  // var_dump($_POST);
+   //var_dump($_POST);
   if(isset($_POST['d']) &&
    isset($_POST['s']) &&
    isset($_POST['f']))
@@ -219,7 +219,7 @@ function updateTextInput(val) {
 
   <div id="viewDiv"></div>
   <div id="paneDiv" class="esri-widget">
-    <br><br><br><br>
+    <br>
     <h3>Adjust the scales <br> to modify routes:</h3>
     <br><br>
 
