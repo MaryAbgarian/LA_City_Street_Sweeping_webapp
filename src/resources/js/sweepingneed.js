@@ -14,8 +14,8 @@ routes[[0, 1, 0]] = "https://localhost/resources/data/geojson/LowDebrisNoTrees.g
 
 routes[[1, 0, "on"]] = "https://localhost/resources/data/geojson/LowIncome.geojson";
 routes[[1, 0, 0]] = "https://localhost/resources/data/geojson/LowIncomeNoTrees.geojson";
-//debris income tree
-routes[[2, 1, "on"]] = "https://localhost/resources/data/geojson/HighDebris.geojson";//data/geojson/debrisHigh.geojson";
+
+routes[[2, 1, "on"]] = "https://localhost/resources/data/geojson/HighDebris.geojson";
 routes[[2, 1, 0]] = "https://localhost/resources/data/geojson/HighDebrisNoTrees.geojson";
 
 routes[[1, 2, "on"]] = "https://localhost/resources/data/geojson/HighIncome.geojson";
@@ -27,7 +27,7 @@ routes[[0, 0, 0]] = "https://localhost/resources/data/geojson/LowDebrisLowIncome
 routes[[1, 1, "on"]] = "https://localhost/resources/data/geojson/Standard.geojson";
 routes[[1, 1, 0]] = "https://localhost/resources/data/geojson/NoTrees.geojson";
 
-routes[[2, 2, "on"]] = "https://localhost/resources/data/geojson/HighDebrisHighIncome.geojson";//output.geojson";//geojson/debrisHighincomeHigh.geojson
+routes[[2, 2, "on"]] = "https://localhost/resources/data/geojson/HighDebrisHighIncome.geojson";
 
 routes[[2, 2, 0]] = "https://localhost/resources/data/geojson/HighDebrisHighIncomeNoTrees.geojson";
 
@@ -57,7 +57,7 @@ require([
   "esri/renderers/ClassBreaksRenderer",
   "esri/widgets/Legend",
   "dojo/domReady!"
-  ], function(Map, MapView, Graphic, GraphicsLayer,  FeatureSet, GeoJSONLayer, UniqueValueRenderer, CSVLayer, SimpleLineSymbol, parser, domStyle, PopupTemplate, Search, uniqueValues, SimpleFillSymbol, Color, ClassBreaksRenderer, Legend) {
+  ], function(Map, MapView, Graphic, GraphicsLayer, FeatureSet, GeoJSONLayer, UniqueValueRenderer, CSVLayer, SimpleLineSymbol, parser, domStyle, PopupTemplate, Search, uniqueValues, SimpleFillSymbol, Color, ClassBreaksRenderer, Legend) {
 
 
 
@@ -66,13 +66,13 @@ require([
       size: 3
     };
 
-    const more75 = {
+    const more75 = {//above 75%, lowest need for sweeping
       type: "simple-line", 
       color: [56, 168, 0, 1],
       style: "solid",
       outline: {
         width: 0.2,
-        color: [56, 168, 0, 1]
+        color: [56, 168, 0, 1]//dark green
       }
     };
 
@@ -82,7 +82,7 @@ require([
       style: "solid",
       outline: {
         width: 0.2,
-        color: [139, 209, 0, 1]
+        color: [139, 209, 0, 1]//light green
       }
     };
 
@@ -92,17 +92,17 @@ require([
       style: "solid",
       outline: {
         width: 0.2,
-        color: [  255, 165, 0, 1]
+        color: [  255, 165, 0, 1]//orange
       }
     };
 
-    const less35 = {
+    const less25 = {
       type: "simple-line", 
       color: [255, 0, 0,1 ],
       style: "solid",
       outline: {
         width: 0.2,
-        color: [255, 0, 0, 1]
+        color: [255, 0, 0, 1]//red
       }
     };
 
@@ -126,25 +126,25 @@ require([
       classBreakInfos: [
       {
         minValue: 1,
-        maxValue: 340,
-        symbol: less35,
+        maxValue: 300,
+        symbol: less25,
         label: "Most need for frequent sweeping"
       },
       {
-        minValue: 341,
-        maxValue: 700,
+        minValue: 301,
+        maxValue: 600,
         symbol: less50,
         label: "More than average need for frequent sweeping"
       },
       {
-        minValue: 491,
-        maxValue: 740,
+        minValue: 601,
+        maxValue: 900,
         symbol: more50,
         label: "Less than average need for frequent sweeping"
       },
       {
-        minValue: 741,
-        maxValue: 2000,
+        minValue: 901,
+        maxValue: 2000, //the maximum amount of routes is about 1200 but I wrote 2000 just in case that changes
         symbol: more75,
         label: "Least need for frequent sweeping"
       }
