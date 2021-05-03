@@ -4,8 +4,7 @@
 <h3>Project deliverables:</h3>
 <ul>
 <li>Recommendations on street sweeping route optimization</li>
-<li>Interactive map of the proposed new routes</li>
-<li>Street sweeping assessment report</li>
+<li>Documentation</li>
 </ul>
   
 <h3>Project Description:</h3>
