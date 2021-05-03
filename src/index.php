@@ -20,34 +20,34 @@
     </video>
 
     <div class="container-fluid">
-          <h1>Los Angeles City Street Sweeping Project</h1>
+      <h1>Los Angeles City Street Sweeping Project</h1>
       <div class="fill">
-      <div class="options">
-      <form action="directions.php" id="form" method="POST">
+        <div class="options">
+          <form action="sweepingneed.php" id="form" method="POST">
 
-        <label for="customRange3" id="Debris" class="form-label">Debris Factor</label>
-        <input type="range" class="form-range" id="d" name="d" min="0" max="2" step="1" onchange="updateTextInput(this.value);">
+            <label for="customRange3" id="Debris" class="form-label">Debris Factor</label>
+            <input type="range" class="form-range" id="d" name="d" min="0" max="2" step="1" onchange="updateTextInput(this.value);">
 
-        <label for="customRange3" id="Socio" class="form-label">Socioeconomic Factor</label>
-        <input type="range" class="form-range" id="s" name="s" min="0" max="2" step="1" onchange="updateTextInput(this.value);">
+            <label for="customRange3" id="Socio" class="form-label">Socioeconomic Factor</label>
+            <input type="range" class="form-range" id="s" name="s" min="0" max="2" step="1" onchange="updateTextInput(this.value);">
 
-        <div class="form-check">
-          <label class="form-check-label"  for="flexCheckDefault">
-            Tree Foliage Factor 
-          </label>
-          <input type="checkbox" id="f" name="f" onchange="updateTextInput(this.value);" >
+            <div class="form-check">
+              <label class="form-check-label"  for="flexCheckDefault">
+                Tree Foliage Factor 
+              </label>
+              <input type="checkbox" id="f" name="f" onchange="updateTextInput(this.value);" >
 
-        </div>
+            </div>
+          </div>
+          <div class="press">
+            <button type="submit" class="btn btn-dark">Generate</button>
+          </div>
+
+        </form>
       </div>
-        <div class="press">
-          <button type="submit" class="btn btn-dark">Generate</button>
-        </div>
+    </div>
 
-    </form>
-  </div>
-  </div>
+    <script src="/resources/js/index.js"></script>
 
-  <script src="/resources/js/index.js"></script>
-
-</body>
-</html>
+  </body>
+  </html>
