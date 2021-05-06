@@ -17,14 +17,21 @@
 <body>
 
   <?php 
-
   if(isset($_POST['d']) ||
-   isset($_POST['s']) ||
-   isset($_POST['f']))
+   isset($_POST['s']))
   {
     $val1 = $_POST['d'];
     $val2 = $_POST['s'];
-    $val3 = $_POST['f'];
+  }
+  if(isset($_POST['f']))
+  {
+        $val3 = $_POST['f'];
+
+  }
+  else
+  {
+            $val3 = 0;
+
   }
   ?>
 
