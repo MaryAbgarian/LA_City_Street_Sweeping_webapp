@@ -1,8 +1,6 @@
 var txt="Low";
 document.getElementById("d").value=0;
 document.getElementById("s").value=0;
-document.getElementById("f").value=0;
-
 document.getElementById("Debris").innerHTML="Debris Factor: "+txt;
 document.getElementById("Socio").innerHTML="Socioeconomic Factor: "+txt;
 
@@ -25,5 +23,4 @@ function updateTextInput(val) {
         txt="High";
       document.getElementById("Socio").innerHTML="Socioeconomic Factor: "+txt;
     }
-    
   }
